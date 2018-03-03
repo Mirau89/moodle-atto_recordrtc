@@ -40,10 +40,9 @@
 /* eslint-disable camelcase, spaced-comment */
 
 // JSHint directives.
-/*global Y */
+/*globals required: false*/
 /*global M */
 /*jshint onevar: false*/
-/*jshint require: false*/
 
 // Scrutinizer CI directives.
 /** global: Y */
