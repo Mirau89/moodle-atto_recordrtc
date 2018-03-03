@@ -43,6 +43,7 @@
 /*global Y */
 /*global M */
 /*jshint onevar: false*/
+/*jshint require: false*/
 
 // Scrutinizer CI directives.
 /** global: Y */
