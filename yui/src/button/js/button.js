@@ -41,7 +41,7 @@
 
 // JSHint directives.
 /*global M */
-/*jshint onevar: false, browser: true, adapter: true */
+/*jshint bowser: true*/
 
 // Scrutinizer CI directives.
 /** global: Y */
