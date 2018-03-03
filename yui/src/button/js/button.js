@@ -40,7 +40,7 @@
 /* eslint-disable camelcase, spaced-comment */
 
 // JSHint directives.
-/*globals required: false*/
+/*globals require: false*/
 /*global M */
 /*jshint onevar: false*/
 
