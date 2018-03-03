@@ -91,7 +91,7 @@ var PLUGINNAME = 'atto_recordrtc',
           '<button id="upload" class="btn btn-primary btn-block">{{attachrecording}}</button>' +
         '</div>' +
         '<div class="{{bs_col}}3"></div>' +
-      '</div>' +
+      '</div>' + 
     '</div>';
 
 Y.namespace('M.atto_recordrtc').Button = Y.Base.create('button', Y.M.editor_atto.EditorPlugin, [], {
