@@ -29,10 +29,10 @@
 
 // Scrutinizer CI directives.
 /**
- * global: M 
+ * global: M
  */
 /**
- * global: Y 
+ * global: Y
  */
 
 M.atto_recordrtc = M.atto_recordrtc || {};
@@ -66,12 +66,13 @@ M.atto_recordrtc.videomodule = {
 
         // Run when user clicks on "record" button.
         cm.startStopBtn.on(
-            'click', function () {
+            'click',
+            function () {
                 cm.startStopBtn.set('disabled', true);
 
                 // If button is displaying "Start Recording" or "Record Again".
-                if ((cm.startStopBtn.get('textContent') === M.util.get_string('startrecording', 'atto_recordrtc')) 
-                    || (cm.startStopBtn.get('textContent') === M.util.get_string('recordagain', 'atto_recordrtc')) 
+                if ((cm.startStopBtn.get('textContent') === M.util.get_string('startrecording', 'atto_recordrtc'))
+                    || (cm.startStopBtn.get('textContent') === M.util.get_string('recordagain', 'atto_recordrtc'))
                     || (cm.startStopBtn.get('textContent') === M.util.get_string('recordingfailed', 'atto_recordrtc'))
                 ) {
                     // Make sure the upload button is not shown.
@@ -125,7 +126,8 @@ M.atto_recordrtc.videomodule = {
                     window.setTimeout(
                         function () {
                             cm.startStopBtn.set('disabled', false);
-                        }, 1000
+                        },
+                        1000
                     );
 
                     // Stop recording.

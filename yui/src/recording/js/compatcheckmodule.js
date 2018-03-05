@@ -29,7 +29,7 @@
 
 // Scrutinizer CI directives.
 /**
- * global: M 
+ * global: M
  */
 
 M.atto_recordrtc = M.atto_recordrtc || {};
@@ -43,7 +43,8 @@ M.atto_recordrtc.compatcheckmodule = {
     check_has_gum: function () {
         if (!(navigator.mediaDevices && window.MediaRecorder)) {
             am.show_alert(
-                'nowebrtc', function () {
+                'nowebrtc',
+                function () {
                     cm.editorScope.closeDialogue(cm.editorScope);
                 }
             );
@@ -60,7 +61,8 @@ M.atto_recordrtc.compatcheckmodule = {
 
             if (window.bowser.chrome || window.bowser.opera) {
                 am.show_alert(
-                    'gumsecurity', function () {
+                    'gumsecurity',
+                    function () {
                         cm.editorScope.closeDialogue(cm.editorScope);
                     }
                 );
@@ -73,8 +75,8 @@ M.atto_recordrtc.compatcheckmodule = {
     // - Chrome 49+;
     // - Opera 36+.
     check_browser: function () {
-        if (!((window.bowser.firefox && window.bowser.version >= 29) 
-            || (window.bowser.chrome && window.bowser.version >= 49) 
+        if (!((window.bowser.firefox && window.bowser.version >= 29)
+            || (window.bowser.chrome && window.bowser.version >= 49)
             || (window.bowser.opera && window.bowser.version >= 36))
         ) {
             cm.alertWarning.ancestor().ancestor().removeClass('hide');

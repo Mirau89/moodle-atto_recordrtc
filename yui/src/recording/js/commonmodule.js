@@ -35,10 +35,10 @@
 
 // Scrutinizer CI directives.
 /**
- * global: M 
+ * global: M
  */
 /**
- * global: Y 
+ * global: Y
  */
 
 M.atto_recordrtc = M.atto_recordrtc || {};
@@ -115,7 +115,8 @@ M.atto_recordrtc.commonmodule = {
 
         // Handle when upload button is clicked.
         cm.uploadBtn.on(
-            'click', function () {
+            'click',
+            function () {
                 // Trigger error if no recording has been made.
                 if (cm.chunks.length === 0) {
                     am.show_alert('norecordingfound');
@@ -124,7 +125,8 @@ M.atto_recordrtc.commonmodule = {
 
                     // Upload recording to server.
                     cm.upload_to_server(
-                        cm.recType, function (progress, fileURLOrError) {
+                        cm.recType,
+                        function (progress, fileURLOrError) {
                             if (progress === 'ended') { // Insert annotation in text.
                                 cm.uploadBtn.set('disabled', false);
                                 cm.insert_annotation(cm.recType, fileURLOrError);
@@ -234,7 +236,8 @@ M.atto_recordrtc.commonmodule = {
                 // Pass FormData to PHP script using XHR.
                 var uploadEndpoint = M.cfg.wwwroot + '/repository/repository_ajax.php?action=upload';
                 cm.make_xmlhttprequest(
-                    uploadEndpoint, formData,
+                    uploadEndpoint,
+                    formData,
                     function (progress, responseText) {
                         if (progress === 'upload-ended') {
                             callback('ended', window.JSON.parse(responseText).url);

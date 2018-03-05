@@ -29,10 +29,10 @@
 
 // Scrutinizer CI directives.
 /**
- * global: M 
+ * global: M
  */
 /**
- * global: Y 
+ * global: Y
  */
 
 M.atto_recordrtc = M.atto_recordrtc || {};
@@ -47,7 +47,8 @@ M.atto_recordrtc.abstractmodule = {
     // Possibility to add on-alert-close event.
     show_alert: function (subject, onCloseEvent) {
         Y.use(
-            'moodle-core-notification-alert', function () {
+            'moodle-core-notification-alert',
+            function () {
                 var dialogue = new M.core.alert(
                     {
                         title: M.util.get_string(subject + '_title', 'atto_recordrtc'),
@@ -77,7 +78,8 @@ M.atto_recordrtc.abstractmodule = {
             am.show_alert(stringName, treatAsStopped);
         } else {
             am.show_alert(
-                stringName, function () {
+                stringName,
+                function () {
                     cm.editorScope.closeDialogue(cm.editorScope);
                 }
             );

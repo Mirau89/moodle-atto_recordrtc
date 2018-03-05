@@ -1,5 +1,6 @@
 YUI.add(
-    'moodle-atto_recordrtc-button', function (Y, NAME) {
+    'moodle-atto_recordrtc-button',
+    function (Y, NAME) {
 
         // This file is part of Moodle - http://moodle.org/
         //
@@ -48,10 +49,10 @@ YUI.add(
 
         // Scrutinizer CI directives.
         /**
-         * global: Y 
+         * global: Y
          */
         /**
-         * global: M 
+         * global: M
          */
 
         var PLUGINNAME = 'atto_recordrtc',
@@ -101,7 +102,10 @@ YUI.add(
         '</div>';
 
         Y.namespace('M.atto_recordrtc').Button = Y.Base.create(
-            'button', Y.M.editor_atto.EditorPlugin, [], {
+            'button',
+            Y.M.editor_atto.EditorPlugin,
+            [],
+            {
                 /**
                  * The current language by default.
                  */
@@ -128,7 +132,8 @@ YUI.add(
 
                         // If dialogue is closed during recording, do the following.
                         dialogue.after(
-                            'visibleChange', function () {
+                            'visibleChange',
+                            function () {
                                 var closed = !dialogue.get('visible'),
                                 m = M.atto_recordrtc.commonmodule;
 
@@ -154,19 +159,22 @@ YUI.add(
                         );
 
                         dialogue.on(
-                            'click', function () {
+                            'click',
+                            function () {
                                 this.centered();
                             }
                         );
 
                         // Require Bowser and adapter.js libraries.
                         require(
-                            ['atto_recordrtc/adapter'], function (adapter) {
+                            ['atto_recordrtc/adapter'],
+                            function (adapter) {
                                 window.adapter = adapter;
                             }
                         );
                         require(
-                            ['atto_recordrtc/bowser'], function (bowser) {
+                            ['atto_recordrtc/bowser'],
+                            function (bowser) {
                                 window.bowser = bowser;
                             }
                         );
@@ -294,7 +302,8 @@ YUI.add(
                     scope.get('host').insertContentAtFocusPoint(annotation);
                     scope.markUpdated();
                 }
-            }, {
+            },
+            {
                 ATTRS: {
                     /**
                      * The contextid to use when generating this recordrtc.
@@ -400,5 +409,7 @@ YUI.add(
         );
 
 
-    }, '@VERSION@', {"requires": ["moodle-editor_atto-plugin", "moodle-atto_recordrtc-recording"]}
+    },
+    '@VERSION@',
+    {"requires": ["moodle-editor_atto-plugin", "moodle-atto_recordrtc-recording"]}
 );

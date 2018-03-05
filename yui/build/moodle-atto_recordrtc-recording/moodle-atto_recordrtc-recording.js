@@ -1,5 +1,6 @@
 YUI.add(
-    'moodle-atto_recordrtc-recording', function (Y, NAME) {
+    'moodle-atto_recordrtc-recording',
+    function (Y, NAME) {
 
         // This file is part of Moodle - http://moodle.org/
         //
@@ -38,10 +39,10 @@ YUI.add(
 
         // Scrutinizer CI directives.
         /**
-    * global: M 
+    * global: M
     */
         /**
-    * global: Y 
+    * global: Y
     */
 
         M.atto_recordrtc = M.atto_recordrtc || {};
@@ -118,7 +119,8 @@ YUI.add(
 
                 // Handle when upload button is clicked.
                 cm.uploadBtn.on(
-                    'click', function () {
+                    'click',
+                    function () {
                         // Trigger error if no recording has been made.
                         if (cm.chunks.length === 0) {
                             am.show_alert('norecordingfound');
@@ -127,7 +129,8 @@ YUI.add(
 
                             // Upload recording to server.
                             cm.upload_to_server(
-                                cm.recType, function (progress, fileURLOrError) {
+                                cm.recType,
+                                function (progress, fileURLOrError) {
                                     if (progress === 'ended') { // Insert annotation in text.
                                         cm.uploadBtn.set('disabled', false);
                                         cm.insert_annotation(cm.recType, fileURLOrError);
@@ -237,7 +240,8 @@ YUI.add(
                         // Pass FormData to PHP script using XHR.
                         var uploadEndpoint = M.cfg.wwwroot + '/repository/repository_ajax.php?action=upload';
                         cm.make_xmlhttprequest(
-                            uploadEndpoint, formData,
+                            uploadEndpoint,
+                            formData,
                             function (progress, responseText) {
                                 if (progress === 'upload-ended') {
                                     callback('ended', window.JSON.parse(responseText).url);
@@ -365,7 +369,7 @@ YUI.add(
 
         // Scrutinizer CI directives.
         /**
-    * global: M 
+    * global: M
     */
 
         M.atto_recordrtc = M.atto_recordrtc || {};
@@ -379,7 +383,8 @@ YUI.add(
             check_has_gum: function () {
                 if (!(navigator.mediaDevices && window.MediaRecorder)) {
                     am.show_alert(
-                        'nowebrtc', function () {
+                        'nowebrtc',
+                        function () {
                             cm.editorScope.closeDialogue(cm.editorScope);
                         }
                     );
@@ -396,7 +401,8 @@ YUI.add(
 
                     if (window.bowser.chrome || window.bowser.opera) {
                         am.show_alert(
-                            'gumsecurity', function () {
+                            'gumsecurity',
+                            function () {
                                 cm.editorScope.closeDialogue(cm.editorScope);
                             }
                         );
@@ -409,8 +415,8 @@ YUI.add(
             // - Chrome 49+;
             // - Opera 36+.
             check_browser: function () {
-                if (!((window.bowser.firefox && window.bowser.version >= 29) 
-                    || (window.bowser.chrome && window.bowser.version >= 49) 
+                if (!((window.bowser.firefox && window.bowser.version >= 29)
+                    || (window.bowser.chrome && window.bowser.version >= 49)
                     || (window.bowser.opera && window.bowser.version >= 36))
                 ) {
                     cm.alertWarning.ancestor().ancestor().removeClass('hide');
@@ -448,10 +454,10 @@ YUI.add(
 
         // Scrutinizer CI directives.
         /**
-    * global: M 
+    * global: M
     */
         /**
-    * global: Y 
+    * global: Y
     */
 
         M.atto_recordrtc = M.atto_recordrtc || {};
@@ -466,7 +472,8 @@ YUI.add(
             // Possibility to add on-alert-close event.
             show_alert: function (subject, onCloseEvent) {
                 Y.use(
-                    'moodle-core-notification-alert', function () {
+                    'moodle-core-notification-alert',
+                    function () {
                         var dialogue = new M.core.alert(
                             {
                                 title: M.util.get_string(subject + '_title', 'atto_recordrtc'),
@@ -496,7 +503,8 @@ YUI.add(
                     am.show_alert(stringName, treatAsStopped);
                 } else {
                     am.show_alert(
-                        stringName, function () {
+                        stringName,
+                        function () {
                             cm.editorScope.closeDialogue(cm.editorScope);
                         }
                     );
@@ -571,10 +579,10 @@ YUI.add(
 
         // Scrutinizer CI directives.
         /**
-    * global: M 
+    * global: M
     */
         /**
-    * global: Y 
+    * global: Y
     */
 
         M.atto_recordrtc = M.atto_recordrtc || {};
@@ -608,12 +616,13 @@ YUI.add(
 
                 // Run when user clicks on "record" button.
                 cm.startStopBtn.on(
-                    'click', function () {
+                    'click',
+                    function () {
                         cm.startStopBtn.set('disabled', true);
 
                         // If button is displaying "Start Recording" or "Record Again".
-                        if ((cm.startStopBtn.get('textContent') === M.util.get_string('startrecording', 'atto_recordrtc')) 
-                            || (cm.startStopBtn.get('textContent') === M.util.get_string('recordagain', 'atto_recordrtc')) 
+                        if ((cm.startStopBtn.get('textContent') === M.util.get_string('startrecording', 'atto_recordrtc'))
+                            || (cm.startStopBtn.get('textContent') === M.util.get_string('recordagain', 'atto_recordrtc'))
                             || (cm.startStopBtn.get('textContent') === M.util.get_string('recordingfailed', 'atto_recordrtc'))
                         ) {
                             // Make sure the audio player and upload button are not shown.
@@ -664,7 +673,8 @@ YUI.add(
                             window.setTimeout(
                                 function () {
                                     cm.startStopBtn.set('disabled', false);
-                                }, 1000
+                                },
+                                1000
                             );
 
                             // Stop recording.
@@ -735,10 +745,10 @@ YUI.add(
 
         // Scrutinizer CI directives.
         /**
-    * global: M 
+    * global: M
     */
         /**
-    * global: Y 
+    * global: Y
     */
 
         M.atto_recordrtc = M.atto_recordrtc || {};
@@ -772,12 +782,13 @@ YUI.add(
 
                 // Run when user clicks on "record" button.
                 cm.startStopBtn.on(
-                    'click', function () {
+                    'click',
+                    function () {
                         cm.startStopBtn.set('disabled', true);
 
                         // If button is displaying "Start Recording" or "Record Again".
-                        if ((cm.startStopBtn.get('textContent') === M.util.get_string('startrecording', 'atto_recordrtc')) 
-                            || (cm.startStopBtn.get('textContent') === M.util.get_string('recordagain', 'atto_recordrtc')) 
+                        if ((cm.startStopBtn.get('textContent') === M.util.get_string('startrecording', 'atto_recordrtc'))
+                            || (cm.startStopBtn.get('textContent') === M.util.get_string('recordagain', 'atto_recordrtc'))
                             || (cm.startStopBtn.get('textContent') === M.util.get_string('recordingfailed', 'atto_recordrtc'))
                         ) {
                             // Make sure the upload button is not shown.
@@ -831,7 +842,8 @@ YUI.add(
                             window.setTimeout(
                                 function () {
                                     cm.startStopBtn.set('disabled', false);
-                                }, 1000
+                                },
+                                1000
                             );
 
                             // Stop recording.
@@ -878,5 +890,7 @@ YUI.add(
         };
 
 
-    }, '@VERSION@', {"requires": ["moodle-atto_recordrtc-button"]}
+    },
+    '@VERSION@',
+    {"requires": ["moodle-atto_recordrtc-button"]}
 );

@@ -46,10 +46,10 @@
 
 // Scrutinizer CI directives.
 /**
- * global: Y 
+ * global: Y
  */
 /**
- * global: M 
+ * global: M
  */
 
 var PLUGINNAME = 'atto_recordrtc',
@@ -95,11 +95,14 @@ var PLUGINNAME = 'atto_recordrtc',
           '<button id="upload" class="btn btn-primary btn-block">{{attachrecording}}</button>' +
         '</div>' +
         '<div class="{{bs_col}}3"></div>' +
-      '</div>' + 
+      '</div>' +
     '</div>';
 
 Y.namespace('M.atto_recordrtc').Button = Y.Base.create(
-    'button', Y.M.editor_atto.EditorPlugin, [], {
+    'button',
+    Y.M.editor_atto.EditorPlugin,
+    [],
+    {
         /**
          * The current language by default.
          */
@@ -126,7 +129,8 @@ Y.namespace('M.atto_recordrtc').Button = Y.Base.create(
 
                 // If dialogue is closed during recording, do the following.
                 dialogue.after(
-                    'visibleChange', function () {
+                    'visibleChange',
+                    function () {
                         var closed = !dialogue.get('visible'),
                         m = M.atto_recordrtc.commonmodule;
 
@@ -152,19 +156,22 @@ Y.namespace('M.atto_recordrtc').Button = Y.Base.create(
                 );
 
                 dialogue.on(
-                    'click', function () {
+                    'click',
+                    function () {
                         this.centered();
                     }
                 );
 
                 // Require Bowser and adapter.js libraries.
                 require(
-                    ['atto_recordrtc/adapter'], function (adapter) {
+                    ['atto_recordrtc/adapter'],
+                    function (adapter) {
                         window.adapter = adapter;
                     }
                 );
                 require(
-                    ['atto_recordrtc/bowser'], function (bowser) {
+                    ['atto_recordrtc/bowser'],
+                    function (bowser) {
                         window.bowser = bowser;
                     }
                 );
@@ -292,7 +299,8 @@ Y.namespace('M.atto_recordrtc').Button = Y.Base.create(
             scope.get('host').insertContentAtFocusPoint(annotation);
             scope.markUpdated();
         }
-    }, {
+    },
+    {
         ATTRS: {
             /**
              * The contextid to use when generating this recordrtc.
