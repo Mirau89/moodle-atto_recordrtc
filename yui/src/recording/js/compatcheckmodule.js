@@ -17,18 +17,20 @@
 /**
  * Atto recordrtc library functions for checking browser compatibility
  *
- * @package    atto_recordrtc
- * @author     Jesus Federico (jesus [at] blindsidenetworks [dt] com)
- * @author     Jacob Prud'homme (jacob [dt] prudhomme [at] blindsidenetworks [dt] com)
- * @copyright  2017 Blindside Networks Inc.
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   atto_recordrtc
+ * @author    Jesus Federico (jesus [at] blindsidenetworks [dt] com)
+ * @author    Jacob Prud'homme (jacob [dt] prudhomme [at] blindsidenetworks [dt] com)
+ * @copyright 2017 Blindside Networks Inc.
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 // ESLint directives.
 /* eslint-disable camelcase */
 
 // Scrutinizer CI directives.
-/** global: M */
+/**
+ * global: M 
+ */
 
 M.atto_recordrtc = M.atto_recordrtc || {};
 
@@ -38,16 +40,18 @@ var cm = M.atto_recordrtc.commonmodule,
 
 M.atto_recordrtc.compatcheckmodule = {
     // Show alert and close plugin if browser does not support WebRTC at all.
-    check_has_gum: function() {
+    check_has_gum: function () {
         if (!(navigator.mediaDevices && window.MediaRecorder)) {
-            am.show_alert('nowebrtc', function() {
-                cm.editorScope.closeDialogue(cm.editorScope);
-            });
+            am.show_alert(
+                'nowebrtc', function () {
+                    cm.editorScope.closeDialogue(cm.editorScope);
+                }
+            );
         }
     },
 
     // Notify and redirect user if plugin is used from insecure location.
-    check_secure: function() {
+    check_secure: function () {
         var isSecureOrigin = (window.location.protocol === 'https:') ||
                              (window.location.host.indexOf('localhost') !== -1);
 
@@ -55,9 +59,11 @@ M.atto_recordrtc.compatcheckmodule = {
             cm.alertDanger.ancestor().ancestor().removeClass('hide');
 
             if (window.bowser.chrome || window.bowser.opera) {
-                am.show_alert('gumsecurity', function() {
-                    cm.editorScope.closeDialogue(cm.editorScope);
-                });
+                am.show_alert(
+                    'gumsecurity', function () {
+                        cm.editorScope.closeDialogue(cm.editorScope);
+                    }
+                );
             }
         }
     },
@@ -66,10 +72,11 @@ M.atto_recordrtc.compatcheckmodule = {
     // - Firefox 29+;
     // - Chrome 49+;
     // - Opera 36+.
-    check_browser: function() {
-        if (!((window.bowser.firefox && window.bowser.version >= 29) ||
-              (window.bowser.chrome && window.bowser.version >= 49) ||
-              (window.bowser.opera && window.bowser.version >= 36))) {
+    check_browser: function () {
+        if (!((window.bowser.firefox && window.bowser.version >= 29) 
+            || (window.bowser.chrome && window.bowser.version >= 49) 
+            || (window.bowser.opera && window.bowser.version >= 36))
+        ) {
             cm.alertWarning.ancestor().ancestor().removeClass('hide');
         }
     }

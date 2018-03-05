@@ -17,19 +17,23 @@
 /**
  * Atto recordrtc library functions
  *
- * @package    atto_recordrtc
- * @author     Jesus Federico (jesus [at] blindsidenetworks [dt] com)
- * @author     Jacob Prud'homme (jacob [dt] prudhomme [at] blindsidenetworks [dt] com)
- * @copyright  2017 Blindside Networks Inc.
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   atto_recordrtc
+ * @author    Jesus Federico (jesus [at] blindsidenetworks [dt] com)
+ * @author    Jacob Prud'homme (jacob [dt] prudhomme [at] blindsidenetworks [dt] com)
+ * @copyright 2017 Blindside Networks Inc.
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 // ESLint directives.
 /* eslint-disable camelcase, spaced-comment */
 
 // Scrutinizer CI directives.
-/** global: M */
-/** global: Y */
+/**
+ * global: M 
+ */
+/**
+ * global: Y 
+ */
 
 M.atto_recordrtc = M.atto_recordrtc || {};
 
@@ -39,7 +43,7 @@ var cm = M.atto_recordrtc.commonmodule,
     ccm = M.atto_recordrtc.compatcheckmodule;
 
 M.atto_recordrtc.audiomodule = {
-    init: function(scope) {
+    init: function (scope) {
         // Assignment of global variables.
         cm.editorScope = scope; // Allows access to the editor's "this" context.
         cm.alertWarning = Y.one('div#alert-warning');
@@ -61,95 +65,98 @@ M.atto_recordrtc.audiomodule = {
         ccm.check_browser();
 
         // Run when user clicks on "record" button.
-        cm.startStopBtn.on('click', function() {
-            cm.startStopBtn.set('disabled', true);
+        cm.startStopBtn.on(
+            'click', function () {
+                cm.startStopBtn.set('disabled', true);
 
-            // If button is displaying "Start Recording" or "Record Again".
-            if ((cm.startStopBtn.get('textContent') === M.util.get_string('startrecording', 'atto_recordrtc')) ||
-                (cm.startStopBtn.get('textContent') === M.util.get_string('recordagain', 'atto_recordrtc')) ||
-                (cm.startStopBtn.get('textContent') === M.util.get_string('recordingfailed', 'atto_recordrtc'))) {
-                // Make sure the audio player and upload button are not shown.
-                cm.player.ancestor().ancestor().addClass('hide');
-                cm.uploadBtn.ancestor().ancestor().addClass('hide');
+                // If button is displaying "Start Recording" or "Record Again".
+                if ((cm.startStopBtn.get('textContent') === M.util.get_string('startrecording', 'atto_recordrtc')) 
+                    || (cm.startStopBtn.get('textContent') === M.util.get_string('recordagain', 'atto_recordrtc')) 
+                    || (cm.startStopBtn.get('textContent') === M.util.get_string('recordingfailed', 'atto_recordrtc'))
+                ) {
+                    // Make sure the audio player and upload button are not shown.
+                    cm.player.ancestor().ancestor().addClass('hide');
+                    cm.uploadBtn.ancestor().ancestor().addClass('hide');
 
-                // Change look of recording button.
-                if (!cm.olderMoodle) {
-                    cm.startStopBtn.replaceClass('btn-outline-danger', 'btn-danger');
-                }
-
-                // Empty the array containing the previously recorded chunks.
-                cm.chunks = [];
-                cm.blobSize = 0;
-
-                // Initialize common configurations.
-                var commonConfig = {
-                    // When the stream is captured from the microphone/webcam.
-                    onMediaCaptured: function(stream) {
-                        // Make audio stream available at a higher level by making it a property of the common module.
-                        cm.stream = stream;
-
-                        cm.start_recording(cm.recType, cm.stream);
-                    },
-
-                    // Revert button to "Record Again" when recording is stopped.
-                    onMediaStopped: function(btnLabel) {
-                        cm.startStopBtn.set('textContent', btnLabel);
-                        cm.startStopBtn.set('disabled', false);
-                        if (!cm.olderMoodle) {
-                            cm.startStopBtn.replaceClass('btn-danger', 'btn-outline-danger');
-                        }
-                    },
-
-                    // Handle recording errors.
-                    onMediaCapturingFailed: function(error) {
-                        am.handle_gum_errors(error, commonConfig);
+                    // Change look of recording button.
+                    if (!cm.olderMoodle) {
+                        cm.startStopBtn.replaceClass('btn-outline-danger', 'btn-danger');
                     }
-                };
 
-                // Capture audio stream from microphone.
-                M.atto_recordrtc.audiomodule.capture_audio(commonConfig);
-            } else { // If button is displaying "Stop Recording".
-                // First of all clears the countdownTicker.
-                window.clearInterval(cm.countdownTicker);
+                    // Empty the array containing the previously recorded chunks.
+                    cm.chunks = [];
+                    cm.blobSize = 0;
 
-                // Disable "Record Again" button for 1s to allow background processing (closing streams).
-                window.setTimeout(function() {
-                    cm.startStopBtn.set('disabled', false);
-                }, 1000);
+                    // Initialize common configurations.
+                    var commonConfig = {
+                        // When the stream is captured from the microphone/webcam.
+                        onMediaCaptured: function (stream) {
+                            // Make audio stream available at a higher level by making it a property of the common module.
+                            cm.stream = stream;
 
-                // Stop recording.
-                cm.stop_recording(cm.stream);
+                            cm.start_recording(cm.recType, cm.stream);
+                        },
 
-                // Change button to offer to record again.
-                cm.startStopBtn.set('textContent', M.util.get_string('recordagain', 'atto_recordrtc'));
-                if (!cm.olderMoodle) {
-                    cm.startStopBtn.replaceClass('btn-danger', 'btn-outline-danger');
+                        // Revert button to "Record Again" when recording is stopped.
+                        onMediaStopped: function (btnLabel) {
+                            cm.startStopBtn.set('textContent', btnLabel);
+                            cm.startStopBtn.set('disabled', false);
+                            if (!cm.olderMoodle) {
+                                cm.startStopBtn.replaceClass('btn-danger', 'btn-outline-danger');
+                            }
+                        },
+
+                        // Handle recording errors.
+                        onMediaCapturingFailed: function (error) {
+                            am.handle_gum_errors(error, commonConfig);
+                        }
+                    };
+
+                    // Capture audio stream from microphone.
+                    M.atto_recordrtc.audiomodule.capture_audio(commonConfig);
+                } else { // If button is displaying "Stop Recording".
+                    // First of all clears the countdownTicker.
+                    window.clearInterval(cm.countdownTicker);
+
+                    // Disable "Record Again" button for 1s to allow background processing (closing streams).
+                    window.setTimeout(
+                        function () {
+                            cm.startStopBtn.set('disabled', false);
+                        }, 1000
+                    );
+
+                    // Stop recording.
+                    cm.stop_recording(cm.stream);
+
+                    // Change button to offer to record again.
+                    cm.startStopBtn.set('textContent', M.util.get_string('recordagain', 'atto_recordrtc'));
+                    if (!cm.olderMoodle) {
+                        cm.startStopBtn.replaceClass('btn-danger', 'btn-outline-danger');
+                    }
                 }
-            }
 
-            // Get dialogue centered.
-            cm.editorScope.getDialogue().centered();
-        });
+                // Get dialogue centered.
+                cm.editorScope.getDialogue().centered();
+            }
+        );
     },
 
     // Setup to get audio stream from microphone.
-    capture_audio: function(config) {
+    capture_audio: function (config) {
         cm.capture_user_media(
             // Media constraints.
             {
                 audio: true
             },
-
             // Success callback.
-            function(audioStream) {
+            function (audioStream) {
                 // Set audio player source to microphone stream.
                 cm.playerDOM.srcObject = audioStream;
 
                 config.onMediaCaptured(audioStream);
             },
-
             // Error callback.
-            function(error) {
+            function (error) {
                 config.onMediaCapturingFailed(error);
             }
         );

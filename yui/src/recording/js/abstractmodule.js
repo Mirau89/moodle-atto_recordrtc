@@ -17,19 +17,23 @@
 /**
  * Atto recordrtc library functions for function abstractions
  *
- * @package    atto_recordrtc
- * @author     Jesus Federico (jesus [at] blindsidenetworks [dt] com)
- * @author     Jacob Prud'homme (jacob [dt] prudhomme [at] blindsidenetworks [dt] com)
- * @copyright  2017 Blindside Networks Inc.
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   atto_recordrtc
+ * @author    Jesus Federico (jesus [at] blindsidenetworks [dt] com)
+ * @author    Jacob Prud'homme (jacob [dt] prudhomme [at] blindsidenetworks [dt] com)
+ * @copyright 2017 Blindside Networks Inc.
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 // ESLint directives.
 /* eslint-disable camelcase */
 
 // Scrutinizer CI directives.
-/** global: M */
-/** global: Y */
+/**
+ * global: M 
+ */
+/**
+ * global: Y 
+ */
 
 M.atto_recordrtc = M.atto_recordrtc || {};
 
@@ -41,23 +45,27 @@ M.atto_recordrtc.abstractmodule = {
     // A helper for making a Moodle alert appear.
     // Subject is the content of the alert (which error ther alert is for).
     // Possibility to add on-alert-close event.
-    show_alert: function(subject, onCloseEvent) {
-        Y.use('moodle-core-notification-alert', function() {
-            var dialogue = new M.core.alert({
-                title: M.util.get_string(subject + '_title', 'atto_recordrtc'),
-                message: M.util.get_string(subject, 'atto_recordrtc')
-            });
+    show_alert: function (subject, onCloseEvent) {
+        Y.use(
+            'moodle-core-notification-alert', function () {
+                var dialogue = new M.core.alert(
+                    {
+                        title: M.util.get_string(subject + '_title', 'atto_recordrtc'),
+                        message: M.util.get_string(subject, 'atto_recordrtc')
+                    }
+                );
 
-            if (onCloseEvent) {
-                dialogue.after('complete', onCloseEvent);
+                if (onCloseEvent) {
+                    dialogue.after('complete', onCloseEvent);
+                }
             }
-        });
+        );
     },
 
     // Handle getUserMedia errors.
-    handle_gum_errors: function(error, commonConfig) {
+    handle_gum_errors: function (error, commonConfig) {
         var btnLabel = M.util.get_string('recordingfailed', 'atto_recordrtc'),
-            treatAsStopped = function() {
+            treatAsStopped = function () {
                 commonConfig.onMediaStopped(btnLabel);
             };
 
@@ -68,14 +76,16 @@ M.atto_recordrtc.abstractmodule = {
         if (stringName !== 'gumsecurity') {
             am.show_alert(stringName, treatAsStopped);
         } else {
-            am.show_alert(stringName, function() {
-                cm.editorScope.closeDialogue(cm.editorScope);
-            });
+            am.show_alert(
+                stringName, function () {
+                    cm.editorScope.closeDialogue(cm.editorScope);
+                }
+            );
         }
     },
 
     // Select best options for the recording codec.
-    select_rec_options: function(recType) {
+    select_rec_options: function (recType) {
         var types, options;
 
         if (recType === 'audio') {
@@ -98,9 +108,11 @@ M.atto_recordrtc.abstractmodule = {
             };
         }
 
-        var compatTypes = types.filter(function(type) {
-            return window.MediaRecorder.isTypeSupported(type);
-        });
+        var compatTypes = types.filter(
+            function (type) {
+                return window.MediaRecorder.isTypeSupported(type);
+            }
+        );
 
         if (compatTypes.length !== 0) {
             options.mimeType = compatTypes[0];

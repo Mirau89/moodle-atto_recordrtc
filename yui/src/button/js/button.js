@@ -17,11 +17,11 @@
 /**
  * Atto recordrtc library functions
  *
- * @package    atto_recordrtc
- * @author     Jesus Federico (jesus [at] blindsidenetworks [dt] com)
- * @author     Jacob Prud'homme (jacob [dt] prudhomme [at] blindsidenetworks [dt] com)
- * @copyright  2017 Blindside Networks Inc.
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   atto_recordrtc
+ * @author    Jesus Federico (jesus [at] blindsidenetworks [dt] com)
+ * @author    Jacob Prud'homme (jacob [dt] prudhomme [at] blindsidenetworks [dt] com)
+ * @copyright 2017 Blindside Networks Inc.
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
@@ -32,8 +32,8 @@
  * Atto text editor recordrtc plugin.
  *
  * @namespace M.atto_recordrtc
- * @class button
- * @extends M.editor_atto.EditorPlugin
+ * @class     button
+ * @extends   M.editor_atto.EditorPlugin
  */
 
 // ESLint directives.
@@ -45,179 +45,198 @@
 /*jshint onevar: false*/
 
 // Scrutinizer CI directives.
-/** global: Y */
-/** global: M */
+/**
+ * global: Y 
+ */
+/**
+ * global: M 
+ */
 
 var PLUGINNAME = 'atto_recordrtc',
     TEMPLATE = '' +
-    ' <div class="{{PLUGINNAME}} container-fluid">' +
-      ' <div class="{{bs_row}} hide">' +
-        ' <div class="{{bs_col}}12">' +
-          ' <div id="alert-warning" class="alert {{bs_al_warn}}">' +
-            ' <strong>{{browseralert_title}}</strong> {{browseralert}}' +
-          ' </div>' +
-        ' </div>' +
-      ' </div>' +
-      ' <div class="{{bs_row}} hide">' +
-        ' <div class="{{bs_col}}12">' +
-          ' <div id="alert-danger" class="alert {{bs_al_dang}}">' +
-            ' <strong>{{insecurealert_title}}</strong> {{insecurealert}}' +
-          ' </div>' +
-        ' </div>' +
-      ' </div>' +
-      ' <div class="{{bs_row}} hide">' +
-        ' {{#if isAudio}}' +
-          ' <div class="{{bs_col}}1"></div>' +
-          ' <div class="{{bs_col}}10">' +
-            ' <audio id="player"></audio>' +
-          ' </div>' +
-          ' <div class="{{bs_col}}1"></div>' +
-        ' {{else}}' +
-          ' <div class="{{bs_col}}12">' +
-            ' <video id="player"></video>' +
-          ' </div>' +
-        ' {{/if}}' +
-      ' </div>' +
-      ' <div class="{{bs_row}}">' +
-        ' <div class="{{bs_col}}1"></div>' +
-        ' <div class="{{bs_col}}10">' +
-          ' <button id="start-stop" class="{{bs_ss_btn}}">{{startrecording}}</button>' +
-        ' </div>' +
-        ' <div class="{{bs_col}}1"></div>' +
-      ' </div>' +
-      ' <div class="{{bs_row}} hide">' +
-        ' <div class="{{bs_col}}3"></div>' +
-        ' <div class="{{bs_col}}6">' +
-          ' <button id="upload" class="btn btn-primary btn-block">{{attachrecording}}</button>' +
-        ' </div>' +
-        ' <div class="{{bs_col}}3"></div>' +
-      ' </div>' +
-    ' </div>';
+    '<div class="{{PLUGINNAME}} container-fluid">' +
+      '<div class="{{bs_row}} hide">' +
+        '<div class="{{bs_col}}12">' +
+          '<div id="alert-warning" class="alert {{bs_al_warn}}">' +
+            '<strong>{{browseralert_title}}</strong> {{browseralert}}' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="{{bs_row}} hide">' +
+        '<div class="{{bs_col}}12">' +
+          '<div id="alert-danger" class="alert {{bs_al_dang}}">' +
+            '<strong>{{insecurealert_title}}</strong> {{insecurealert}}' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="{{bs_row}} hide">' +
+        '{{#if isAudio}}' +
+          '<div class="{{bs_col}}1"></div>' +
+          '<div class="{{bs_col}}10">' +
+            '<audio id="player"></audio>' +
+          '</div>' +
+          '<div class="{{bs_col}}1"></div>' +
+        '{{else}}' +
+          '<div class="{{bs_col}}12">' +
+            '<video id="player"></video>' +
+          '</div>' +
+        '{{/if}}' +
+      '</div>' +
+      '<div class="{{bs_row}}">' +
+        '<div class="{{bs_col}}1"></div>' +
+        '<div class="{{bs_col}}10">' +
+          '<button id="start-stop" class="{{bs_ss_btn}}">{{startrecording}}</button>' +
+        '</div>' +
+        '<div class="{{bs_col}}1"></div>' +
+      '</div>' +
+      '<div class="{{bs_row}} hide">' +
+        '<div class="{{bs_col}}3"></div>' +
+        '<div class="{{bs_col}}6">' +
+          '<button id="upload" class="btn btn-primary btn-block">{{attachrecording}}</button>' +
+        '</div>' +
+        '<div class="{{bs_col}}3"></div>' +
+      '</div>' + 
+    '</div>';
 
-Y.namespace('M.atto_recordrtc').Button = Y.Base.create('button', Y.M.editor_atto.EditorPlugin, [], {
-    /**
-     * The current language by default.
-     */
-    _lang: 'en',
+Y.namespace('M.atto_recordrtc').Button = Y.Base.create(
+    'button', Y.M.editor_atto.EditorPlugin, [], {
+        /**
+         * The current language by default.
+         */
+        _lang: 'en',
 
-    initializer: function() {
-        if (this.get('host').canShowFilepicker('media')) {
-            // Add audio and/or video buttons depending on the settings.
-            var allowedtypes = this.get('allowedtypes');
-            if (allowedtypes === 'both' || allowedtypes === 'audio') {
-                this._addButton('audio', this._audio);
-            }
-            if (allowedtypes === 'both' || allowedtypes === 'video') {
-                this._addButton('video', this._video);
-            }
-
-            // Initialize the dialogue box.
-            var dialogue = this.getDialogue({
-                width: 1000,
-                focusAfterHide: null
-            });
-
-            // If dialogue is closed during recording, do the following.
-            dialogue.after('visibleChange', function() {
-                var closed = !dialogue.get('visible'),
-                    m = M.atto_recordrtc.commonmodule;
-
-                if (closed) {
-                    window.clearInterval(m.countdownTicker);
-
-                    if (m.mediaRecorder && m.mediaRecorder.state !== 'inactive') {
-                        m.mediaRecorder.stop();
-                    }
-
-                    if (m.stream) {
-                        m.stream.getTracks().forEach(function(track) {
-                            if (track.readyState !== 'ended') {
-                                track.stop();
-                            }
-                        });
-                    }
+        initializer: function () {
+            if (this.get('host').canShowFilepicker('media')) {
+                // Add audio and/or video buttons depending on the settings.
+                var allowedtypes = this.get('allowedtypes');
+                if (allowedtypes === 'both' || allowedtypes === 'audio') {
+                    this._addButton('audio', this._audio);
+                }
+                if (allowedtypes === 'both' || allowedtypes === 'video') {
+                    this._addButton('video', this._video);
                 }
 
-            });
+                // Initialize the dialogue box.
+                var dialogue = this.getDialogue(
+                    {
+                        width: 1000,
+                        focusAfterHide: null
+                    }
+                );
 
-            dialogue.on('click', function() {
-                this.centered();
-            });
+                // If dialogue is closed during recording, do the following.
+                dialogue.after(
+                    'visibleChange', function () {
+                        var closed = !dialogue.get('visible'),
+                        m = M.atto_recordrtc.commonmodule;
 
-            // Require Bowser and adapter.js libraries.
-            require(['atto_recordrtc/adapter'], function(adapter) {
-                window.adapter = adapter;
-            });
-            require(['atto_recordrtc/bowser'], function(bowser) {
-                window.bowser = bowser;
-            });
-        }
-    },
+                        if (closed) {
+                            window.clearInterval(m.countdownTicker);
 
-    /**
-     * Add the buttons to the Atto toolbar.
-     *
-     * @method _addButton
-     * @param {string} type
-     * @param {callback} callback
-     * @private
-     */
-    _addButton: function(type, callback) {
-        this.addButton({
-            buttonName: type,
-            icon: this.get(type + 'rtcicon'),
-            iconComponent: PLUGINNAME,
-            callback: callback,
-            title: type + 'rtc',
-            tags: type + 'rtc',
-            tagMatchRequiresAll: false
-        });
-    },
+                            if (m.mediaRecorder && m.mediaRecorder.state !== 'inactive') {
+                                m.mediaRecorder.stop();
+                            }
 
-    /**
-     * Toggle audiortc and normal display mode
-     *
-     * @method _audio
-     * @private
-     */
-    _audio: function() {
-        var dialogue = this.getDialogue();
+                            if (m.stream) {
+                                m.stream.getTracks().forEach(
+                                    function (track) {
+                                        if (track.readyState !== 'ended') {
+                                            track.stop();
+                                        }
+                                    }
+                                );
+                            }
+                        }
 
-        dialogue.set('headerContent', M.util.get_string('audiortc', 'atto_recordrtc'));
-        dialogue.set('bodyContent', this._createContent('audio'));
+                    }
+                );
 
-        dialogue.show();
+                dialogue.on(
+                    'click', function () {
+                        this.centered();
+                    }
+                );
 
-        M.atto_recordrtc.audiomodule.init(this);
-    },
+                // Require Bowser and adapter.js libraries.
+                require(
+                    ['atto_recordrtc/adapter'], function (adapter) {
+                        window.adapter = adapter;
+                    }
+                );
+                require(
+                    ['atto_recordrtc/bowser'], function (bowser) {
+                        window.bowser = bowser;
+                    }
+                );
+            }
+        },
 
-    /**
-     * Toggle videortc and normal display mode
-     *
-     * @method _video
-     * @private
-     */
-    _video: function() {
-        var dialogue = this.getDialogue();
+        /**
+         * Add the buttons to the Atto toolbar.
+         *
+         * @method  _addButton
+         * @param   {string} type
+         * @param   {callback} callback
+         * @private
+         */
+        _addButton: function (type, callback) {
+            this.addButton(
+                {
+                    buttonName: type,
+                    icon: this.get(type + 'rtcicon'),
+                    iconComponent: PLUGINNAME,
+                    callback: callback,
+                    title: type + 'rtc',
+                    tags: type + 'rtc',
+                    tagMatchRequiresAll: false
+                }
+            );
+        },
 
-        dialogue.set('headerContent', M.util.get_string('videortc', 'atto_recordrtc'));
-        dialogue.set('bodyContent', this._createContent('video'));
+        /**
+         * Toggle audiortc and normal display mode
+         *
+         * @method  _audio
+         * @private
+         */
+        _audio: function () {
+            var dialogue = this.getDialogue();
 
-        dialogue.show();
+            dialogue.set('headerContent', M.util.get_string('audiortc', 'atto_recordrtc'));
+            dialogue.set('bodyContent', this._createContent('audio'));
 
-        M.atto_recordrtc.videomodule.init(this);
-    },
+            dialogue.show();
 
-    /**
-     * Create the HTML to be displayed in the dialogue box
-     *
-     * @method _createContent
-     * @param {string} type
-     * @returns {Object}
-     * @private
-     */
-    _createContent: function(type) {
-        var isAudio = (type === 'audio'),
+            M.atto_recordrtc.audiomodule.init(this);
+        },
+
+        /**
+         * Toggle videortc and normal display mode
+         *
+         * @method  _video
+         * @private
+         */
+        _video: function () {
+            var dialogue = this.getDialogue();
+
+            dialogue.set('headerContent', M.util.get_string('videortc', 'atto_recordrtc'));
+            dialogue.set('bodyContent', this._createContent('video'));
+
+            dialogue.show();
+
+            M.atto_recordrtc.videomodule.init(this);
+        },
+
+        /**
+         * Create the HTML to be displayed in the dialogue box
+         *
+         * @method  _createContent
+         * @param   {string} type
+         * @returns {Object}
+         * @private
+         */
+        _createContent: function (type) {
+            var isAudio = (type === 'audio'),
             bsRow = this.get('oldermoodle') ? 'row-fluid' : 'row',
             bsCol = this.get('oldermoodle') ? 'span' : 'col-xs-',
             bsAlWarn = this.get('oldermoodle') ? '' : 'alert-warning',
@@ -225,152 +244,155 @@ Y.namespace('M.atto_recordrtc').Button = Y.Base.create('button', Y.M.editor_atto
             bsSsBtn = this.get('oldermoodle') ? 'btn btn-large btn-danger btn-block'
                                               : 'btn btn-lg btn-outline-danger btn-block';
 
-        var bodyContent = Y.Handlebars.compile(TEMPLATE)({
-            PLUGINNAME: PLUGINNAME,
-            isAudio: isAudio,
-            bs_row: bsRow,
-            bs_col: bsCol,
-            bs_al_warn: bsAlWarn,
-            bs_al_dang: bsAlDang,
-            bs_ss_btn: bsSsBtn,
-            bs_ul_btn: 'btn btn-primary btn-block',
-            browseralert_title: M.util.get_string('browseralert_title', 'atto_recordrtc'),
-            browseralert: M.util.get_string('browseralert', 'atto_recordrtc'),
-            insecurealert_title: M.util.get_string('insecurealert_title', 'atto_recordrtc'),
-            insecurealert: M.util.get_string('insecurealert', 'atto_recordrtc'),
-            startrecording: M.util.get_string('startrecording', 'atto_recordrtc'),
-            attachrecording: M.util.get_string('attachrecording', 'atto_recordrtc')
-        });
+            var bodyContent = Y.Handlebars.compile(TEMPLATE)(
+                {
+                    PLUGINNAME: PLUGINNAME,
+                    isAudio: isAudio,
+                    bs_row: bsRow,
+                    bs_col: bsCol,
+                    bs_al_warn: bsAlWarn,
+                    bs_al_dang: bsAlDang,
+                    bs_ss_btn: bsSsBtn,
+                    bs_ul_btn: 'btn btn-primary btn-block',
+                    browseralert_title: M.util.get_string('browseralert_title', 'atto_recordrtc'),
+                    browseralert: M.util.get_string('browseralert', 'atto_recordrtc'),
+                    insecurealert_title: M.util.get_string('insecurealert_title', 'atto_recordrtc'),
+                    insecurealert: M.util.get_string('insecurealert', 'atto_recordrtc'),
+                    startrecording: M.util.get_string('startrecording', 'atto_recordrtc'),
+                    attachrecording: M.util.get_string('attachrecording', 'atto_recordrtc')
+                }
+            );
 
-        return bodyContent;
-    },
-
-    /**
-     * Close the dialogue without further action.
-     *
-     * @method closeDialogue
-     * @param {Object} scope The "this" context of the editor.
-     */
-    closeDialogue: function(scope) {
-        scope.getDialogue().hide();
-
-        scope.editor.focus();
-    },
-
-    /**
-     * Insert the annotation link in the editor.
-     *
-     * @method setLink
-     * @param {Object} scope The "this" context of the editor.
-     * @param {string} annotation The HTML link to the recording.
-     */
-    setLink: function(scope, annotation) {
-        scope.getDialogue().hide();
-
-        scope.editor.focus();
-        scope.get('host').insertContentAtFocusPoint(annotation);
-        scope.markUpdated();
-    }
-}, {
-    ATTRS: {
-        /**
-         * The contextid to use when generating this recordrtc.
-         *
-         * @attribute contextid
-         * @type String
-         */
-        contextid: {
-            value: null
+            return bodyContent;
         },
 
         /**
-         * The sesskey to use when generating this recordrtc.
+         * Close the dialogue without further action.
          *
-         * @attribute sesskey
-         * @type String
+         * @method closeDialogue
+         * @param  {Object} scope The "this" context of the editor.
          */
-        sesskey: {
-            value: null
+        closeDialogue: function (scope) {
+            scope.getDialogue().hide();
+
+            scope.editor.focus();
         },
 
         /**
-         * The allowedtypes to use when generating this recordrtc.
+         * Insert the annotation link in the editor.
          *
-         * @attribute allowedtypes
-         * @type String
+         * @method setLink
+         * @param  {Object} scope The "this" context of the editor.
+         * @param  {string} annotation The HTML link to the recording.
          */
-        allowedtypes: {
-            value: null
-        },
+        setLink: function (scope, annotation) {
+            scope.getDialogue().hide();
 
-        /**
-         * The audiobitrate to use when generating this recordrtc.
-         *
-         * @attribute audiobitrate
-         * @type String
-         */
-        audiobitrate: {
-            value: null
-        },
+            scope.editor.focus();
+            scope.get('host').insertContentAtFocusPoint(annotation);
+            scope.markUpdated();
+        }
+    }, {
+        ATTRS: {
+            /**
+             * The contextid to use when generating this recordrtc.
+             *
+             * @attribute contextid
+             * @type      String
+             */
+            contextid: {
+                value: null
+            },
 
-        /**
-         * The videobitrate to use when generating this recordrtc.
-         *
-         * @attribute videobitrate
-         * @type String
-         */
-        videobitrate: {
-            value: null
-        },
+            /**
+             * The sesskey to use when generating this recordrtc.
+             *
+             * @attribute sesskey
+             * @type      String
+             */
+            sesskey: {
+                value: null
+            },
 
-        /**
-         * The timelimit to use when generating this recordrtc.
-         *
-         * @attribute timelimit
-         * @type String
-         */
-        timelimit: {
-            value: null
-        },
+            /**
+             * The allowedtypes to use when generating this recordrtc.
+             *
+             * @attribute allowedtypes
+             * @type      String
+             */
+            allowedtypes: {
+                value: null
+            },
 
-        /**
-         * The audiortcicon to use when generating this recordrtc.
-         *
-         * @attribute audiortcicon
-         * @type String
-         */
-        audiortcicon: {
-            value: null
-        },
+            /**
+             * The audiobitrate to use when generating this recordrtc.
+             *
+             * @attribute audiobitrate
+             * @type      String
+             */
+            audiobitrate: {
+                value: null
+            },
 
-        /**
-         * The videortcicon to use when generating this recordrtc.
-         *
-         * @attribute videortcicon
-         * @type String
-         */
-        videortcicon: {
-            value: null
-        },
+            /**
+             * The videobitrate to use when generating this recordrtc.
+             *
+             * @attribute videobitrate
+             * @type      String
+             */
+            videobitrate: {
+                value: null
+            },
 
-        /**
-         * True if Moodle is version < 3.2.
-         *
-         * @attribute oldermoodle
-         * @type Boolean
-         */
-        oldermoodle: {
-            value: null
-        },
+            /**
+             * The timelimit to use when generating this recordrtc.
+             *
+             * @attribute timelimit
+             * @type      String
+             */
+            timelimit: {
+                value: null
+            },
 
-        /**
-         * Maximum upload size set on server, in MB.
-         *
-         * @attribute maxrecsize
-         * @type String
-         */
-        maxrecsize: {
-            value: null
+            /**
+             * The audiortcicon to use when generating this recordrtc.
+             *
+             * @attribute audiortcicon
+             * @type      String
+             */
+            audiortcicon: {
+                value: null
+            },
+
+            /**
+             * The videortcicon to use when generating this recordrtc.
+             *
+             * @attribute videortcicon
+             * @type      String
+             */
+            videortcicon: {
+                value: null
+            },
+
+            /**
+             * True if Moodle is version < 3.2.
+             *
+             * @attribute oldermoodle
+             * @type      Boolean
+             */
+            oldermoodle: {
+                value: null
+            },
+
+            /**
+             * Maximum upload size set on server, in MB.
+             *
+             * @attribute maxrecsize
+             * @type      String
+             */
+            maxrecsize: {
+                value: null
+            }
         }
     }
-});
+);
