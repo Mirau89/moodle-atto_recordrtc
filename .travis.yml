@@ -83,6 +83,10 @@ before_install:
   - nvm use default
   - cd ../..
   - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^${MOODLE_PLUGIN_CI}
+  # Specific for version 1
+  - 'if [ ${MOODLE_PLUGIN_CI} = "1" ]; then
+        sudo sed -i "s/public $ignoreNewlines = false;/public $ignoreNewlines = true;" "./ci/vendor/moodlehq/moodle-local_codechecker/pear/PHP/CodeSniffer/Standards/Squiz/Sniffs/WhiteSpace/OperatorSpacingSniff.php";
+    fi'
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
 
 install:
