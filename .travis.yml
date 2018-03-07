@@ -83,7 +83,7 @@ before_install:
   - nvm use default
   - cd ../..
   - composer create-project -n --no-dev --prefer-dist moodlerooms/moodle-plugin-ci ci ^${MOODLE_PLUGIN_CI}
-  - sudo sed -i "s/$ignoreNewlines = false/$ignoreNewlines = true/g" "$(grep -rl '"$ignoreNewlines = false;"' ./ci/vendor)"
+  - sudo sed -i "s/'$ignoreNewlines = false'/'$ignoreNewlines = true'/g" "$(grep -rl '$ignoreNewlines = false' ./ci/vendor)"
   - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
 
 install:
